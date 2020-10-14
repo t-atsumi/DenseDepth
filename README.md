@@ -67,6 +67,20 @@ Corresponding paper to cite:
 ```
 
 # Takeyama's memo
+## eyemodel Usage 
+### Training
+```
+python train.py --data eyemodel --gpus 1 --bs 8 --mindepth 0.0 --maxdepth 25.0 --name densedepth_eyemodel
+```
+### test
+```
+python test.py --model model.h5 --input examples/eye/*.jpg
+```
+### demo
+```
+python demo.py --model model.h5
+```
+
 ## kerasでのモデルの保存について
 [このissue](https://github.com/keras-team/keras/issues/9342)と同じく、model.fit()内にてチャックポインタを保存する際に下記エラーが発生
 ```
