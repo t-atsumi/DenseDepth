@@ -74,11 +74,11 @@ python train.py --data eyemodel --gpus 1 --bs 8 --mindepth 0.0 --maxdepth 25.0 -
 ```
 ### test
 ```
-python test.py --model model.h5 --input examples/eye/*.jpg
+python test.py --model eye_data.h5 --input examples/eye/*.jpg
 ```
 ### demo
 ```
-python demo.py --model model.h5
+python demo.py --model eye_data.h5
 ```
 
 ## kerasでのモデルの保存について
