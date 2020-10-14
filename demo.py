@@ -154,7 +154,7 @@ class Window(QtWidgets.QWidget):
         self.updateInput.emit()
 
     def loadVideoFile(self):
-        self.capture = cv2.VideoCapture('video.mp4')
+        self.capture = cv2.VideoCapture('endoscope.mp4')
         self.updateInput.emit()
 
     def loadImage(self):
