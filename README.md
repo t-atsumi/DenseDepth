@@ -43,7 +43,10 @@ Offical Keras (TensorFlow) implementaiton. If you have any questions or need mor
 * [Unreal-1k](https://github.com/ialhashim/DenseDepth): coming soon.
 
 ## Training
+### NYU
 * Run `python train.py --data nyu --gpus 4 --bs 8`.
+### EYEMODEL
+* Run `python train.py --data eyemodel --gpus 1 --bs 8 --mindepth 0.0 --maxdepth 25.0 --name densedepth_eyemodel`.
 
 ## Evaluation
 * Download, but don't extract, the ground truth test data from [here](https://s3-eu-west-1.amazonaws.com/densedepth/nyu_test.zip) (1.4 GB). Then simply run `python evaluate.py`.
@@ -61,4 +64,26 @@ Corresponding paper to cite:
   eid       = {arXiv:1812.11941},
   eprint    = {1812.11941}
 }
+```
+
+# Takeyama's memo
+## kerasでのモデルの保存について
+[このissue](https://github.com/keras-team/keras/issues/9342)と同じく、model.fit()内にてチャックポインタを保存する際に下記エラーが発生
+```
+TypeError: Not JSON Serializable: ?
+```
+そこでkeras/engine/saving.py内のget_json_type()について、下記のように修正すると動いた。
+```python
+  # misc functions (e.g. loss function)
+  if callable(obj):
+      return obj.__name__
+
+  # NOTE: Hacky fix to serialize Dimension objects.
+  from tensorflow.python.framework.tensor_shape import Dimension
+  if type(obj) == Dimension:
+      return int(obj.value or 0)
+      
+  # if obj is a python 'type'
+  if type(obj).__name__ == type.__name__:
+      return obj.__name__
 ```
