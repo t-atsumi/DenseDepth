@@ -101,3 +101,10 @@ TypeError: Not JSON Serializable: ?
   if type(obj).__name__ == type.__name__:
       return obj.__name__
 ```
+
+## Anacondaについて(備忘録)
+下記でDenseDepthをアクティベーション
+```
+C:/Users/take7/Anaconda3/Scripts/activate
+conda activate DenseSepth
+```
