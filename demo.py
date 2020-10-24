@@ -28,7 +28,7 @@ parser.add_argument('--model', default='nyu.h5', type=str, help='Trained Keras m
 args = parser.parse_args()
 
 # Image shapes
-height_rgb, width_rgb = 480, 640
+height_rgb, width_rgb = 320, 320
 height_depth, width_depth = height_rgb // 2, width_rgb // 2
 rgb_width = width_rgb
 rgb_height = height_rgb
@@ -235,7 +235,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         self.depth = resize(np.load('demo_depth.npy'), (240,320))
         self.col_vbo = None
         self.pos_vbo = None
-        self.updateRGBD()
+        # self.updateRGBD()
 
     def xRotation(self):
         return self.xRot
@@ -247,10 +247,10 @@ class GLWidget(QtOpenGL.QGLWidget):
         return self.zRot
 
     def minimumSizeHint(self):
-        return QtCore.QSize(640, 480)
+        return QtCore.QSize(320, 320)
 
     def sizeHint(self):
-        return QtCore.QSize(640, 480)
+        return QtCore.QSize(320, 320)
 
     def setXRotation(self, angle):
         if angle != self.xRot:

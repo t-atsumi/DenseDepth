@@ -103,7 +103,7 @@ if args.data == 'nyu':
 if args.data == 'unreal':
      callbacks = get_nyu_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath)
 if args.data == 'eyemodel':
-     callbacks = get_eyemodel_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath, minDepth=args.mindepth, maxDepth=args.maxdepth)
+     callbacks = get_eyemodel_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath, minDepth=args.mindepth, maxDepth=args.maxdepth, batchsize=args.bs)
 
 # Start training
 model.fit_generator(train_generator, callbacks=callbacks, validation_data=test_generator, epochs=args.epochs, shuffle=True)

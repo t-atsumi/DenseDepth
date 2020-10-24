@@ -45,8 +45,6 @@ Offical Keras (TensorFlow) implementaiton. If you have any questions or need mor
 ## Training
 ### NYU
 * Run `python train.py --data nyu --gpus 4 --bs 8`.
-### EYEMODEL
-* Run `python train.py --data eyemodel --gpus 1 --bs 8 --mindepth 0.0 --maxdepth 25.0 --name densedepth_eyemodel`.
 
 ## Evaluation
 * Download, but don't extract, the ground truth test data from [here](https://s3-eu-west-1.amazonaws.com/densedepth/nyu_test.zip) (1.4 GB). Then simply run `python evaluate.py`.
@@ -70,11 +68,11 @@ Corresponding paper to cite:
 ## eyemodel Usage 
 ### Training
 ```
-python train.py --data eyemodel --gpus 1 --bs 8 --mindepth 0.0 --maxdepth 25.0 --name densedepth_eyemodel
+python train.py --data eyemodel --gpus 1 --bs 4 --epochs 20 --mindepth 0 --maxdepth 25 --name densedepth_eyemodel
 ```
 ### test
 ```
-python test.py --model eye_data.h5 --input examples/eye/*.jpg
+python test.py --model eye_data.h5 --input examples/eye/*.jpg --bs 4 --mindepth 0 --maxdepth 25
 ```
 ### demo
 ```
@@ -106,5 +104,5 @@ TypeError: Not JSON Serializable: ?
 下記でDenseDepthをアクティベーション
 ```
 C:/Users/take7/Anaconda3/Scripts/activate
-conda activate DenseSepth
+conda activate DenseDepth
 ```
