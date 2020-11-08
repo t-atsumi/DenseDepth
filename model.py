@@ -2,7 +2,7 @@ import sys
 
 from keras import applications
 from keras.models import Model, load_model
-from keras.layers import Input, InputLayer, Conv2D, Activation, LeakyReLU, Concatenate
+from keras.layers import Input, InputLayer, Conv2D, Activation, LeakyReLU, Concatenate, LSTM, ConvLSTM2D, BatchNormalization, MaxPooling2D
 from layers import BilinearUpSampling2D
 from loss import depth_loss_function
 
