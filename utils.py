@@ -30,7 +30,6 @@ def load_images(image_files):
     for file in image_files:
         x = np.clip(np.asarray(Image.open( file ), dtype=float) / 255, 0, 1)
         loaded_images.append(x)
-    print('yah')
     print(np.asarray(Image.open(file)).dtype)
     print(loaded_images[0].dtype)
     
