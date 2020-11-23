@@ -248,7 +248,7 @@ class EyeModel_BasicAugmentRGBSequence(Sequence):
         batch_x, batch_y = np.zeros( self.shape_rgb ), np.zeros( self.shape_depth )
 
         # Augmentation of RGB images
-        for i in range(batch_x.shape[0]):
+        for i in range(batch_x.shape[1]):
             index = min((idx * self.batch_size) + i, self.N-1)
 
             sample = self.dataset[index]
