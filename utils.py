@@ -30,18 +30,14 @@ def load_images(image_files):
     for file in image_files:
         x = np.clip(np.asarray(Image.open( file ), dtype=float) / 255, 0, 1)
         loaded_images.append(x)
-    print('yah')
-    print(np.asarray(Image.open(file)).dtype)
-    print(loaded_images[0].dtype)
     
     return np.stack(loaded_images, axis=0)
 
 def to_multichannel(i):
-    if i.shape[2] == 3: return i
     i = i[:,:,0]
     return np.stack((i,i,i), axis=2)
         
-def display_images(outputs, inputs=None, gt=None, is_colormap=True, is_rescale=True):
+def display_images(outputs, inputs=None, gt=None, is_colormap=False, is_rescale=False):
     import matplotlib.pyplot as plt
     import skimage
     from skimage.transform import resize
@@ -60,12 +56,12 @@ def display_images(outputs, inputs=None, gt=None, is_colormap=True, is_rescale=T
         imgs = []
         
         if isinstance(inputs, (list, tuple, np.ndarray)):
-            x = to_multichannel(inputs[i])
+            x = inputs[i]
             x = resize(x, shape, preserve_range=True, mode='reflect', anti_aliasing=True )
             imgs.append(x)
 
         if isinstance(gt, (list, tuple, np.ndarray)):
-            x = to_multichannel(gt[i])
+            x = gt[i]
             x = resize(x, shape, preserve_range=True, mode='reflect', anti_aliasing=True )
             imgs.append(x)
 
@@ -83,11 +79,11 @@ def display_images(outputs, inputs=None, gt=None, is_colormap=True, is_rescale=T
 
     all_images = np.stack(all_images)
 
-    image_uint = all_images.astype(np.uint8)[0]
-    imgs_gray = cv2.cvtColor(image_uint, cv2.COLOR_BGR2GRAY)
-    plasma_image = cv2.applyColorMap(imgs_gray, cv2.COLORMAP_PLASMA)
-    cv2.imshow("aiu", plasma_image)
-    cv2.waitKey(1)
+    # image_uint = all_images.astype(np.uint8)[0]
+    # imgs_gray = cv2.cvtColor(image_uint, cv2.COLOR_BGR2GRAY)
+    # plasma_image = cv2.applyColorMap(imgs_gray, cv2.COLORMAP_PLASMA)
+    # cv2.imshow("aiu", plasma_image)
+    # cv2.waitKey(1)
     
     return skimage.util.montage(all_images, multichannel=True, fill=(0,0,0))
 

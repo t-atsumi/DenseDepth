@@ -32,7 +32,7 @@ print('\nModel loaded ({0}).'.format(args.model))
 
 # Input images
 inputs = load_images( glob.glob(args.input) )
-# inputs_depth = load_images( glob.glob(args.input_depth) )
+inputs_depth = load_images( glob.glob(args.input_depth) )
 print('\nLoaded ({0}) images of size {1}.'.format(inputs.shape[0], inputs.shape[1:]))
 
 # Compute results
@@ -42,7 +42,8 @@ outputs = predict(model, inputs, minDepth=args.mindepth, maxDepth=args.maxdepth,
 #matplotlib.use('TkAgg')   
 
 # Display results
-viz = display_images(outputs.copy(), inputs.copy())
+# viz = display_images(outputs.copy(), inputs.copy())
+viz = display_images(outputs.copy(), inputs.copy(), inputs_depth.copy())
 plt.figure(figsize=(10,5))
 plt.imshow(viz)
 plt.savefig('test.png')

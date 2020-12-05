@@ -55,6 +55,8 @@ def create_model(existing='', is_twohundred=False, is_halffeatures=True):
 
         # Create the model
         model = Model(inputs=base_model.input, outputs=conv3)
+        # model.summary()
+
     else:
         # Load model from file
         if not existing.endswith('.h5'):
