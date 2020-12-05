@@ -85,7 +85,7 @@ def get_nyu_callbacks(model, basemodel, train_generator, test_generator, test_se
 
     return callbacks
 
-def get_eyemodel_callbacks(model, basemodel, train_generator, test_generator, test_set, runPath, minDepth = 0.0, maxDepth = 25.0):
+def get_eyemodel_callbacks(model, basemodel, train_generator, test_generator, test_set, runPath, minDepth = 0.0, maxDepth = 25.0, batchsize = 4):
     callbacks = []
 
     # Callback: Tensorboard
@@ -132,7 +132,7 @@ def get_eyemodel_callbacks(model, basemodel, train_generator, test_generator, te
                 self.writer.add_summary(tf.Summary(value=[tf.Summary.Value(tag='Test', image=make_image(255 * np.hstack(test_samples)))]), epoch)
                 
                 # Metrics
-                e = evaluate(model, test_set['rgb'], test_set['depth'], test_set['crop'], batch_size=6, verbose=True)
+                e = evaluate(model, test_set['rgb'], test_set['depth'], test_set['crop'], batch_size=batchsize, verbose=True)
                 logs.update({'rel': e[3]})
                 logs.update({'rms': e[4]})
                 logs.update({'log10': e[5]})

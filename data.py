@@ -247,7 +247,7 @@ class EyeModel_BasicAugmentRGBSequence(Sequence):
     def __len__(self):
         return int(np.ceil(self.N / float(self.batch_size)))
 
-    def __getitem__(self, idx, is_apply_policy=True):
+    def __getitem__(self, idx, is_apply_policy=False):
         batch_x, batch_y = np.zeros( self.shape_rgb ), np.zeros( self.shape_depth )
 
         # Augmentation of RGB images
@@ -292,7 +292,7 @@ class EyeModel_BasicRGBSequence(Sequence):
             sample = self.dataset[index]
 
             x = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[0]]))).reshape(320,320,3)/255,0,1)
-            y = np.asarray(Image.open(BytesIO(self.data[sample[1]])), dtype=np.float32).reshape(320,320,1).copy().astype(float) / 10.0
+            y = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[1]]) )).reshape(320,320,1)/255*self.maxDepth,0,self.maxDepth)
             y = DepthNorm(y, maxDepth=self.maxDepth)
 
             batch_x[i] = eyemodel_resize(x, 320)
