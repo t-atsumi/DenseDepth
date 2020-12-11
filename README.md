@@ -72,7 +72,9 @@ python train.py --data eyemodel --gpus 1 --bs 4 --epochs 20 --mindepth 0 --maxde
 ```
 ### test
 ```
-python test.py --model eye_data.h5 --input examples/eye/*.jpg --bs 4 --mindepth 0 --maxdepth 25
+python test.py --model eye_data.h5 --input examples/eye/*.jpg --input_depth  examples/eye/*.png  --bs 4 --mindepth 0 --maxdepth 25
+python test.py --model eye_data.h5 --input examples/pig_eye/*.jpg --bs 4 --mindepth 0 --maxdepth 25
+python test.py --model eye_data.h5 --input examples/invivo/*.jpg --bs 4 --mindepth 0 --maxdepth 25
 ```
 ### demo
 ```
