@@ -6,6 +6,10 @@ from zipfile import ZipFile
 from keras.utils import Sequence
 from augment import BasicPolicy
 
+###############################
+## NYU 640*480
+###############################
+
 def extract_zip(input_zip):
     input_zip=ZipFile(input_zip)
     return {name: input_zip.read(name) for name in input_zip.namelist()}
@@ -198,37 +202,37 @@ class Unreal_BasicAugmentRGBSequence(Sequence):
         return batch_x, batch_y
 
 #======================
-# eyemodel dataset
+# Laparo dataset
 #======================
-def eyemodel_resize(img, resolution=320, padding=6):
+def laparo_resize(img, resolution=256, padding=6):
     from skimage.transform import resize
-    return resize(img, (resolution, int(resolution)), preserve_range=True, mode='reflect', anti_aliasing=True )
+    return resize(img, (resolution, int(resolution*15/8)), preserve_range=True, mode='reflect', anti_aliasing=True )
 
-def get_eyemodel_data(batch_size, eyemodel_data_zipfile='eyemodel_data.zip'):
-    data = extract_zip(eyemodel_data_zipfile)
+def get_laparo_data(batch_size, laparo_data_zipfile='laparo_data.zip'):
+    data = extract_zip(laparo_data_zipfile)
 
-    eyemodel_train = list((row.split(',') for row in (data['data/eyemodel_train.csv']).decode("utf-8").split('\r\n') if len(row) > 0))
-    eyemodel_test = list((row.split(',') for row in (data['data/eyemodel_test.csv']).decode("utf-8").split('\r\n') if len(row) > 0))
+    laparo_train = list((row.split(',') for row in (data['data/laparo_train.csv']).decode("utf-8").split('\r\n') if len(row) > 0))
+    laparo_test = list((row.split(',') for row in (data['data/laparo_test.csv']).decode("utf-8").split('\r\n') if len(row) > 0))
 
-    shape_rgb = (batch_size, 320, 320, 3)
-    shape_depth = (batch_size, 160, 160, 1)
+    shape_rgb = (batch_size, 256, 480, 3)
+    shape_depth = (batch_size, 128, 240, 1)
 
     # Helpful for testing...
     if False:
-        eyemodel_train = eyemodel_train[:10]
-        eyemodel_test = eyemodel_test[:10]
+        laparo_train = laparo_train[:10]
+        laparo_test = laparo_test[:10]
 
-    return data, eyemodel_train, eyemodel_test, shape_rgb, shape_depth
+    return data, laparo_train, laparo_test, shape_rgb, shape_depth
 
-def get_eyemodel_train_test_data(batch_size):
-    data, eyemodel_train, eyemodel_test, shape_rgb, shape_depth = get_eyemodel_data(batch_size)
+def get_laparo_train_test_data(batch_size):
+    data, laparo_train, laparo_test, shape_rgb, shape_depth = get_laparo_data(batch_size)
 
-    train_generator = EyeModel_BasicAugmentRGBSequence(data, eyemodel_train, batch_size=batch_size, shape_rgb=shape_rgb, shape_depth=shape_depth)
-    test_generator = EyeModel_BasicRGBSequence(data, eyemodel_test, batch_size=batch_size, shape_rgb=shape_rgb, shape_depth=shape_depth)
+    train_generator = laparo_BasicAugmentRGBSequence(data, laparo_train, batch_size=batch_size, shape_rgb=shape_rgb, shape_depth=shape_depth)
+    test_generator = laparo_BasicRGBSequence(data, laparo_test, batch_size=batch_size, shape_rgb=shape_rgb, shape_depth=shape_depth)
 
     return train_generator, test_generator
 
-class EyeModel_BasicAugmentRGBSequence(Sequence):
+class laparo_BasicAugmentRGBSequence(Sequence):
     def __init__(self, data, dataset, batch_size, shape_rgb, shape_depth, is_flip=False, is_addnoise=False, is_erase=False):
         self.data = data
         self.dataset = dataset
@@ -237,7 +241,7 @@ class EyeModel_BasicAugmentRGBSequence(Sequence):
         self.batch_size = batch_size
         self.shape_rgb = shape_rgb
         self.shape_depth = shape_depth
-        self.maxDepth = 25.0
+        self.maxDepth = 40.0
 
         from sklearn.utils import shuffle
         self.dataset = shuffle(self.dataset, random_state=0)
@@ -256,12 +260,12 @@ class EyeModel_BasicAugmentRGBSequence(Sequence):
 
             sample = self.dataset[index]
             
-            x = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[0]]) )).reshape(320,320,3)/255,0,1)
-            y = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[1]]) )).reshape(320,320,1)/255*self.maxDepth,0,self.maxDepth)
+            x = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[0]]) )).reshape(256,480,3)/255,0,1)
+            y = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[1]]) )).reshape(256,480,1)/255*self.maxDepth,0.1,self.maxDepth)
             y = DepthNorm(y, maxDepth=self.maxDepth)
 
-            batch_x[i] = eyemodel_resize(x, 320)
-            batch_y[i] = eyemodel_resize(y, 160)
+            batch_x[i] = laparo_resize(x, 256)
+            batch_y[i] = laparo_resize(y, 128)
 
             if is_apply_policy: batch_x[i], batch_y[i] = self.policy(batch_x[i], batch_y[i])
 
@@ -271,7 +275,7 @@ class EyeModel_BasicAugmentRGBSequence(Sequence):
 
         return batch_x, batch_y
 
-class EyeModel_BasicRGBSequence(Sequence):
+class laparo_BasicRGBSequence(Sequence):
     def __init__(self, data, dataset, batch_size,shape_rgb, shape_depth):
         self.data = data
         self.dataset = dataset
@@ -279,7 +283,7 @@ class EyeModel_BasicRGBSequence(Sequence):
         self.N = len(self.dataset)
         self.shape_rgb = shape_rgb
         self.shape_depth = shape_depth
-        self.maxDepth = 25.0
+        self.maxDepth = 40.0
 
     def __len__(self):
         return int(np.ceil(self.N / float(self.batch_size)))
@@ -291,12 +295,12 @@ class EyeModel_BasicRGBSequence(Sequence):
 
             sample = self.dataset[index]
 
-            x = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[0]]))).reshape(320,320,3)/255,0,1)
-            y = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[1]]) )).reshape(320,320,1)/255*self.maxDepth,0,self.maxDepth)
+            x = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[0]]))).reshape(256,480,3)/255,0,1)
+            y = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[1]]) )).reshape(256,480,1)/255*self.maxDepth,0.1,self.maxDepth)
             y = DepthNorm(y, maxDepth=self.maxDepth)
 
-            batch_x[i] = eyemodel_resize(x, 320)
-            batch_y[i] = eyemodel_resize(y, 160)
+            batch_x[i] = laparo_resize(x, 256)
+            batch_y[i] = laparo_resize(y, 128)
 
             # DEBUG:
             #self.policy.debug_img(batch_x[i], np.clip(DepthNorm(batch_y[i])/maxDepth,0,1), idx, i)

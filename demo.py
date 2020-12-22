@@ -28,7 +28,7 @@ parser.add_argument('--model', default='nyu.h5', type=str, help='Trained Keras m
 args = parser.parse_args()
 
 # Image shapes
-height_rgb, width_rgb = 320, 320
+height_rgb, width_rgb = 256, 480
 height_depth, width_depth = height_rgb // 2, width_rgb // 2
 rgb_width = width_rgb
 rgb_height = height_rgb

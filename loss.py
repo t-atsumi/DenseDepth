@@ -2,7 +2,7 @@ import keras.backend as K
 import tensorflow as tf
 import numpy as np
 
-def depth_loss_function(y_true, y_pred, theta3=0.1, theta4=0.0, maxDepthVal=25.0):
+def depth_loss_function(y_true, y_pred, theta3=0.1, theta4=0.0, maxDepthVal=40.0):
     
     # Structural similarity (SSIM) index
     l_ssim = K.clip((1 - tf.image.ssim(y_true, y_pred, maxDepthVal)) * 0.5, 0, 1)

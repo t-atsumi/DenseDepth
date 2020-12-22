@@ -5,8 +5,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '5'
 from loss import depth_loss_function
 from utils import predict, save_images, load_test_data
 from model import create_model
-from data import get_nyu_train_test_data, get_unreal_train_test_data, get_eyemodel_train_test_data
-from callbacks import get_nyu_callbacks, get_eyemodel_callbacks
+from data import get_nyu_train_test_data, get_unreal_train_test_data, get_laparo_train_test_data
+from callbacks import get_nyu_callbacks, get_laparo_callbacks
 
 from keras.optimizers import Adam
 from keras.utils import multi_gpu_model
@@ -54,8 +54,8 @@ if args.data == 'nyu':
      train_generator, test_generator = get_nyu_train_test_data( args.bs )
 if args.data == 'unreal': 
     train_generator, test_generator = get_unreal_train_test_data( args.bs )
-if args.data == 'eyemodel': 
-    train_generator, test_generator = get_eyemodel_train_test_data( args.bs )
+if args.data == 'laparo': 
+    train_generator, test_generator = get_laparo_train_test_data( args.bs )
 
 # Training session details
 runID = str(int(time.time())) + '-n' + str(len(train_generator)) + '-e' + str(args.epochs) + '-bs' + str(args.bs) + '-lr' + str(args.lr) + '-' + args.name
@@ -102,8 +102,8 @@ if args.data == 'nyu':
      callbacks = get_nyu_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath)
 if args.data == 'unreal':
      callbacks = get_nyu_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath)
-if args.data == 'eyemodel':
-     callbacks = get_eyemodel_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath, minDepth=args.mindepth, maxDepth=args.maxdepth, batchsize=args.bs)
+if args.data == 'laparo':
+     callbacks = get_laparo_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath, minDepth=args.mindepth, maxDepth=args.maxdepth, batchsize=args.bs)
 
 # Start training
 model.fit_generator(train_generator, callbacks=callbacks, validation_data=test_generator, epochs=args.epochs, shuffle=True)

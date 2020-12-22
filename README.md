@@ -80,6 +80,15 @@ python test.py --model eye_data.h5 --input examples/invivo/*.jpg --bs 4 --mindep
 ```
 python demo.py --model eye_data.h5
 ```
+## Laparo Usage
+### Training
+```
+python train.py --data laparo --gpus 1 --bs 4 --epochs 20 --mindepth 5.0 --maxdepth 40.0 --name densedepth_laparo
+```
+### Test
+```
+python test.py --model models/laparo_trained_model/model.h5 --input examples/laparo/hoge.jpg --bs 4 --mindepth 5 --maxdepth 40
+```
 
 ## kerasでのモデルの保存について
 [このissue](https://github.com/keras-team/keras/issues/9342)と同じく、model.fit()内にてチャックポインタを保存する際に下記エラーが発生
