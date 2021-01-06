@@ -25,10 +25,10 @@ def scale_up(scale, images):
 
     return np.stack(scaled)
 
-def load_images(image_files):
-    loaded_images = []
+def load_images(image_files):#引数はファイルのパスのリスト
+    loaded_images = []#1次元のリストの初期化
     for file in image_files:
-        x = np.clip(np.asarray(Image.open( file ), dtype=float) / 255, 0, 1)
+        x = np.clip(np.asarray(Image.open( file ), dtype=float) / 255, 0, 1)#画像を正規化してnumpy配列に置き換える
         loaded_images.append(x)
     
     return np.stack(loaded_images, axis=0)
@@ -44,8 +44,8 @@ def display_images(outputs, inputs=None, gt=None, is_colormap=False, is_rescale=
 
     plasma = plt.get_cmap('plasma')
     print('outputs : ')
-    print(outputs[0][80, 80])
-    print(outputs[0][80, 80]*25.0)
+    print(outputs[0][60, 80])
+    print(outputs[0][60, 80]*25.0)
     
 
     shape = (outputs[0].shape[0], outputs[0].shape[1], 3)
